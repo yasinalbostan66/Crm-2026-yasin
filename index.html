@@ -15,41 +15,55 @@
     <style>
         :root {
             --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --secondary: #64748b;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #0f172a;
-            --text-light: #64748b;
-            --border: #e2e8f0;
+            --primary-rgb: 37, 99, 235;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --transition: all 0.3s ease;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         [data-theme="dark"] {
             --bg: #0f172a;
             --card-bg: #1e293b;
-            --text: #f8fafc;
+            --text: #f1f5f9;
             --text-light: #94a3b8;
             --border: #334155;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow-x: hidden;
+            background: var(--bg);
+            color: var(--text);
+            /* Prevent keyboard layout jumping */
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .dashboard {
@@ -1121,38 +1135,37 @@
 
         <main>
             <div id="home-view" class="view">
-                <div class="header" style="margin-bottom: 2rem; flex-wrap: wrap; gap: 1.5rem;">
-                    <div style="flex: 1; min-width: 300px;">
-                        <h1 id="welcome-msg" style="font-size: 2rem; margin-bottom: 0.5rem;">Hoş Geldiniz</h1>
-                        <p style="color: var(--text-light); font-weight: 500;">Canlı aktivite, döviz kurları ve tüm
+                <div class="header"
+                    style="margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; display: flex; flex-direction: row; align-items: flex-start;">
+                    <div style="flex: 1; min-width: 200px; order: 2;">
+                        <h1 id="welcome-msg" style="font-size: 1.75rem; margin-bottom: 0.25rem;">Hoş Geldiniz</h1>
+                        <p style="color: var(--text-light); font-weight: 500; font-size: 0.85rem;">Canlı aktivite ve
                             müşteri detayları.</p>
                     </div>
 
-                    <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div style="display: flex; gap: 1rem; align-items: center; order: 1; margin-right: auto;">
                         <div class="stat-card"
-                            style="padding: 1rem; min-width: 180px; align-items: center; border-color: var(--primary);">
+                            style="padding: 0.75rem 1rem; min-width: 140px; align-items: flex-start; border-color: var(--primary); background: var(--primary); color: white; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);">
                             <p id="live-clock"
-                                style="font-size: 1.5rem; font-weight: 800; color: var(--primary); font-family: monospace; line-height: 1;">
+                                style="font-size: 1.5rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; line-height: 1; letter-spacing: -1px;">
                                 00:00:00</p>
-                            <p id="live-date" style="font-size: 0.75rem; color: var(--text-light); font-weight: 600;">1
-                                Ocak 2024</p>
+                            <p id="live-date"
+                                style="font-size: 0.65rem; opacity: 0.9; font-weight: 700; margin-top: 0.25rem; text-transform: uppercase;">
+                                1
+                                OCAK 2026</p>
                         </div>
+                    </div>
 
-                        <div id="currency-bar" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                            <!-- Currency rates will be injected here -->
-                            <div class="stat-card"
-                                style="padding: 0.75rem 1rem; flex-direction: row; align-items: center; gap: 0.75rem;">
-                                <span style="font-weight: 800; color: var(--success); font-size: 0.8rem;">USD</span>
-                                <span id="usd-rate" style="font-weight: 700; font-size: 1rem;">--.--</span>
-                            </div>
-                            <div class="stat-card"
-                                style="padding: 0.75rem 1rem; flex-direction: row; align-items: center; gap: 0.75rem;">
-                                <span style="font-weight: 800; color: #3b82f6; font-size: 0.8rem;">EUR</span>
-                                <span id="eur-rate" style="font-weight: 700; font-size: 1rem;">--.--</span>
-                            </div>
-                            <button onclick="downloadAllData()"
-                                style="background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.75rem; font-weight: 700;">Verileri
-                                Yedekle (Masaüstü/İndirilenler)</button>
+                    <div id="currency-bar" style="display: flex; gap: 0.5rem; flex-wrap: wrap; order: 3;">
+                        <div class="stat-card"
+                            style="padding: 0.5rem 0.75rem; flex-direction: row; align-items: center; gap: 0.5rem; border-radius: 0.75rem;">
+                            <span style="font-weight: 800; color: var(--success); font-size: 0.7rem;">USD</span>
+                            <span id="usd-rate" style="font-weight: 700; font-size: 0.85rem;">--.--</span>
+                        </div>
+                        <div class="stat-card"
+                            style="padding: 0.5rem 0.75rem; flex-direction: row; align-items: center; gap: 0.5rem; border-radius: 0.75rem;">
+                            <span style="font-weight: 800; color: #3b82f6; font-size: 0.7rem;">EUR</span>
+                            <span id="eur-rate" style="font-weight: 700; font-size: 0.85rem;">--.--</span>
                         </div>
                     </div>
                 </div>
@@ -3704,7 +3717,8 @@
             }
 
             // Populate Table
-            visits.sort((a, b) => new Date(`${a.date} ${a.time}`) - new Date(`${b.date} ${b.time}`));
+            // Sort by Date/Time descending for "Newest Plans at Top"
+            visits.sort((a, b) => (b.id || 0) - (a.id || 0));
             const tableList = visits.slice(0, 100);
 
             if (tableList.length === 0) {
@@ -3782,6 +3796,7 @@
                             ${date.getDate()}
                             ${type === 'weekly' ? `<span style="font-size: 0.65rem; color: var(--text-light); font-weight: 700;">${date.toLocaleDateString('tr-TR', { month: 'short' })}</span>` : ''}
                         </span>
+                        <div style="font-size: 0.5rem; font-weight: 700; color: var(--text-light); margin-top: 0.2rem; opacity: 0.7;">09:00 - 19:00</div>
                     </div>
                     ${dayVisits.length > 0 ? `<div style="background: var(--primary); color: white; font-size: 0.6rem; font-weight: 900; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">${dayVisits.length}</div>` : ''}
                 </div>
